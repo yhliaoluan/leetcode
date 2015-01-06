@@ -1,6 +1,6 @@
 /*
- Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
- */
+   Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+   */
 #include <map>
 #include <string>
 #include <algorithm>
@@ -18,24 +18,16 @@ public:
     int lengthOfLongestSubstring(string s) {
         int longest = 0;
         map<char, Node> m;
-        for (int i = 0; i < s.size(); i++) {
-            for (int j = i; j < s.size(); j++) {
-                printf("foreach i:%d j:%d\n", i, j);
-                map<char, Node>::iterator it = m.find(s[j]);
-                if (it == m.end()) {
-                    printf("insert %c %d\n", s[j], j);
-                    m.insert(map<char, Node>::value_type(s[j], Node(j, s[j])));
-                } else {
-                    printf("find %c\n", s[j]);
-                    if (m.size() > longest) {
-                        longest = m.size();
-                    }
-                    i = j;
-                    printf("skip to %d\n", i);
-                    removeLessThan(m, it->second.index + 1);
-                    break;
+        for (int j = 0; j < s.size(); j++) {
+            map<char, Node>::iterator it = m.find(s[j]);
+            if (it != m.end()) {
+                if (m.size() > longest) {
+                    longest = m.size();
                 }
+                removeLessThan(m, it->second.index + 1);
             }
+            printf("insert %c %d\n", s[j], j);
+            m.insert(map<char, Node>::value_type(s[j], Node(j, s[j])));
         }
 
         if (m.size() > longest) {
