@@ -1,7 +1,7 @@
 5
-ab .*c
-aa aa
-aa .a
-aa .*
-aab c*a*b
+1
+2
+3
+4
+5
 
