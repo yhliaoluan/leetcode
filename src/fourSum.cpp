@@ -16,6 +16,20 @@ The solution set must not contain duplicate quadruplets.
 
 using namespace std;
 
+typedef struct _st_Entry {
+    int key;
+    int v1;
+    int v2;
+} Entry;
+
+bool sort_func(Entry left, Entry right) {
+    if (left.key == right.key) {
+        return left.v1 < right.v1;
+    } else {
+        return left.key < right.key;
+    }
+}
+
 class Solution {
 public:
     vector<vector<int> > fourSum(vector<int> &num, int target) {
@@ -24,56 +38,36 @@ public:
             return result;
         }
         sort(num.begin(), num.end());
-        for (int i = 0; i < num.size() - 3; i++) {
-            if (num[i] >= 0 && num[i] > target) {
-                break;
-            }
+        vector<Entry> entries;
+        for (int i = 0; i < num.size() - 1; i++) {
             if (i > 0 && num[i] == num[i - 1]) {
                 continue;
             }
-            for (int j = i + 1; j < num.size() - 2; j++) {
-                if (num[j] >= 0 && num[i] + num[j] > target) {
-                    break;
-                }
+            for (int j = i + 1; j < num.size(); j++) {
                 if (j > i + 1 && num[j] == num[j - 1]) {
                     continue;
                 }
-                for (int k = j + 1; k < num.size() - 1; k++) {
-                    if (num[k] >= 0 && num[i] + num[j] + num[k] > target) {
-                        break;
-                    }
-                    if (k > j + 1 && num[k] == num[k - 1]) {
-                        continue;
-                    }
-                    int index = exists(num, k + 1, num.size() - 1, target - num[i] - num[j] - num[k]);
-                    if (index > -1) {
-                        vector<int> tmp;
-                        tmp.push_back(num[i]);
-                        tmp.push_back(num[j]);
-                        tmp.push_back(num[k]);
-                        tmp.push_back(num[index]);
-                        result.push_back(tmp);
-                    }
+                Entry entry = { num[i] + num[j], i, j };
+                entries.push_back(entry);
+            }
+        }
+        sort(entries.begin(), entries.end(), sort_func);
+        for (int i = 0; i < entries.size() - 1; i++) {
+            for (int j = i + 1; j < entries.size(); j++) {
+                if (entries[i].key + entries[j].key == target &&
+                    entries[i].v1 != entries[j].v1 &&
+                    entries[i].v2 != entries[j].v2) {
+                    vector<int> tmp;
+                    tmp.push_back(num[entries[i].v1]);
+                    tmp.push_back(num[entries[i].v2]);
+                    tmp.push_back(num[entries[j].v1]);
+                    tmp.push_back(num[entries[j].v2]);
+                    sort(tmp.begin(), tmp.end());
+                    result.push_back(tmp);
                 }
             }
         }
         return result;
-    }
-
-private:
-    int exists(vector<int> &num, int from, int to, int i) {
-        if (from == to) {
-            return num[from] == i ? from : -1;
-        }
-
-        int index = (from + to) / 2;
-        if (num[index] > i) {
-            return exists(num, from, index, i);
-        } else if (num[index] < i) {
-            return exists(num, index + 1, to, i);
-        } else {
-            return index;
-        }
     }
 };
 
