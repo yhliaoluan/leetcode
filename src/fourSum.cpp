@@ -95,4 +95,5 @@ int main(int argc, char **argv) {
         num.push_back(atoi(argv[i]));
     }
     TEST(num, atoi(argv[argc - 1]));
+
 }
