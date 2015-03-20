@@ -13,22 +13,9 @@ The solution set must not contain duplicate quadruplets.
  */
 #include <algorithm>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
-
-typedef struct _st_Entry {
-    int key;
-    int v1;
-    int v2;
-} Entry;
-
-bool sort_func(Entry left, Entry right) {
-    if (left.key == right.key) {
-        return left.v1 < right.v1;
-    } else {
-        return left.key < right.key;
-    }
-}
 
 class Solution {
 public:
@@ -38,7 +25,13 @@ public:
             return result;
         }
         sort(num.begin(), num.end());
-        vector<Entry> entries;
+        unordered_map<int, vector<pair<int, int> > > map;
+        for (int i = 0; i < num.size() - 1; i++) {
+            for (int j = i + 1; j < num.size(); j++) {
+                map[num[i] + num[j]].push_back(make_pair(i, j));
+            }
+        }
+
         for (int i = 0; i < num.size() - 1; i++) {
             if (i > 0 && num[i] == num[i - 1]) {
                 continue;
@@ -47,23 +40,24 @@ public:
                 if (j > i + 1 && num[j] == num[j - 1]) {
                     continue;
                 }
-                Entry entry = { num[i] + num[j], i, j };
-                entries.push_back(entry);
-            }
-        }
-        sort(entries.begin(), entries.end(), sort_func);
-        for (int i = 0; i < entries.size() - 1; i++) {
-            for (int j = i + 1; j < entries.size(); j++) {
-                if (entries[i].key + entries[j].key == target &&
-                    entries[i].v1 != entries[j].v1 &&
-                    entries[i].v2 != entries[j].v2) {
-                    vector<int> tmp;
-                    tmp.push_back(num[entries[i].v1]);
-                    tmp.push_back(num[entries[i].v2]);
-                    tmp.push_back(num[entries[j].v1]);
-                    tmp.push_back(num[entries[j].v2]);
-                    sort(tmp.begin(), tmp.end());
-                    result.push_back(tmp);
+                int target2 = target - num[i] - num[j];
+                bool assigned = false;
+                int x, y;
+                for (int k = 0; k < map[target2].size(); k++) {
+                    if (map[target2][k].first > j) {
+                        if (assigned && num[x] == num[map[target2][k].first]) {
+                            continue;
+                        }
+                        assigned = true;
+                        x = map[target2][k].first;
+                        y = map[target2][k].second;
+                        vector<int> tmp;
+                        tmp.push_back(num[i]);
+                        tmp.push_back(num[j]);
+                        tmp.push_back(num[x]);
+                        tmp.push_back(num[y]);
+                        result.push_back(std::move(tmp));
+                    }
                 }
             }
         }
@@ -89,5 +83,4 @@ int main(int argc, char **argv) {
         num.push_back(atoi(argv[i]));
     }
     TEST(num, atoi(argv[argc - 1]));
-
 }
