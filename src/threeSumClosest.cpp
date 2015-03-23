@@ -14,57 +14,40 @@ class Solution {
 public:
     int threeSumClosest(vector<int> &num, int target) {
         sort(num.begin(), num.end());
-        int near = num[0] + num[1] + num[2];
+        int sum = num[0] + num[1] + num[2];
+        int a = abs(sum - target);
         for (int i = 0; i < num.size() - 2; i++) {
-            for (int j = i + 1; j < num.size() - 1; j++) {
-                int third = findNearest(num, j + 1, j + 1, num.size() - 1, target - num[i] - num[j]);
-                if (abs(near - target) > abs(num[i] + num[j] + third - target)) {
-                    near = num[i] + num[j] + third;
+            if (i > 0 && num[i] == num[i - 1]) continue;
+            int low = i + 1;
+            int high = num.size() - 1;
+            int tar = target - num[i];
+            while (low < high) {
+                if (num[low] + num[high] == tar) {
+                    return num[low] + num[high] + num[i];
+                } else if (num[low] + num[high] > tar) {
+                    if (abs(num[low] + num[high] + num[i] - target) < a) {
+                        sum = num[i] + num[low] + num[high];
+                        a = abs(sum - target);
+                    }
+                    while (--high > low && num[high] == num[high + 1]) ;
+                } else {
+                    if (abs(num[low] + num[high] + num[i] - target) < a) {
+                        sum = num[i] + num[low] + num[high];
+                        a = abs(sum - target);
+                    }
+                    while (++low < high && num[low] == num[low - 1]) ;
                 }
             }
         }
-
-        return near;
-    }
-private:
-    int findNearest(vector<int> &num, int lower, int from, int to, int target) {
-        if (from == to) {
-            int nearest = num[from];
-            if (from - 1 >= lower) {
-                if (abs(target - num[from - 1]) < abs(target - nearest)) {
-                    nearest = num[from - 1];
-                }
-            }
-            if (from + 1 < num.size()) {
-                if (abs(target - num[from + 1]) < abs(target - nearest)) {
-                    nearest = num[from + 1];
-                }
-            }
-            return nearest;
-        }
-
-        int index = (from + to) / 2;
-        if (num[index] < target) {
-            return findNearest(num, lower, index + 1, to, target);
-        } else if (num[index] > target) {
-            return findNearest(num, lower, from, index, target);
-        } else {
-            return target;
-        }
+        return sum;
     }
 };
 
 int main(int argc, char **argv) {
-    int n, target;
-    scanf("%d", &n);
     vector<int> nums;
-    for (int i = 0; i < n; i++) {
-        int num;
-        scanf("%d", &num);
-        nums.push_back(num);
+    for (int i = 1; i < argc - 1; i++) {
+        nums.push_back(atoi(argv[i]));
     }
-    scanf("%d", &target);
-
     Solution s;
-    printf("%d\n", s.threeSumClosest(nums, target));
+    printf("%d\n", s.threeSumClosest(nums, atoi(argv[argc - 1])));
 }

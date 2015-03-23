@@ -65,6 +65,36 @@ public:
     }
 };
 
+vector<vector<int> > fourSumN3(vector<int> &num, int target) {
+    vector<vector<int> > result;
+    if (num.size() < 4) {
+        return result;
+    }
+    sort(num.begin(), num.end());
+    for (int i = 0; i < num.size() - 3; i++) {
+        if (i > 0 && num[i] == num[i - 1]) {
+            continue;
+        }
+        for (int j = i + 1; j < num.size() - 2; j++) {
+            if (j > i + 1 && num[j] == num[j - 1]) {
+                continue;
+            }
+            int high = num.size() - 1;
+            int low = j + 1;
+            while (low < high) {
+                if (num[i] + num[j] + num[low] + num[high] == target) {
+                    vector<int> tmp;
+                    tmp.push_back(num[i]);
+                    tmp.push_back(num[j]);
+                    tmp.push_back(num[low]);
+                    tmp.push_back(num[high]);
+                    result.push_back(tmp);
+                }
+            }
+        }
+    }
+}
+
 static Solution s;
 
 static void TEST(vector<int> &num, int target) {
