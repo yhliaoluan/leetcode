@@ -15,69 +15,55 @@ Output: index1=1, index2=2
 
 using namespace std;
 
-typedef struct Node {
-    int value;
-    int index;
+typedef struct _st_Node {
+    int val;
+    int i;
 } Node;
 
-static bool sort_func(Node n1, Node n2) {
-    return n1.value < n2.value;
+bool sort_node(Node &n1, Node &n2) {
+    return n1.val < n2.val;
 }
 
 class Solution {
 public:
     vector<int> twoSum(vector<int> &numbers, int target) {
         vector<Node> nodes;
-        for (int i = 0; i < numbers.size(); i++) {
-            Node node = { numbers[i], i + 1 };
-            nodes.push_back(node);
-        }
-
-        sort(nodes.begin(), nodes.end(), sort_func);
-
         vector<int> result;
-        for (int i = 0; i < nodes.size() - 1; i++) {
-            if (nodes[i].value > target) {
-                continue;
-            }
-            for (int j = i + 1; j < nodes.size(); j++) {
-                if (nodes[i].value + nodes[j].value == target) {
-                    if (nodes[i].index < nodes[j].index) {
-                        result.push_back(nodes[i].index);
-                        result.push_back(nodes[j].index);
-                    } else {
-                        result.push_back(nodes[j].index);
-                        result.push_back(nodes[i].index);
-                    }
-                    return result;
-                } else if (nodes[i].value + nodes[j].value > target) {
-                    break;
+        for (int i = 0; i < numbers.size(); i++) {
+            Node n = { numbers[i], i };
+            nodes.push_back(n);
+        }
+        sort(nodes.begin(), nodes.end(), sort_node);
+        int low = 0;
+        int high = nodes.size() - 1;
+        while (low < high) {
+            if (nodes[low].val + nodes[high].val == target) {
+                if (nodes[low].i < nodes[high].i) {
+                    result.push_back(nodes[low].i + 1);
+                    result.push_back(nodes[high].i + 1);
+                } else {
+                    result.push_back(nodes[high].i + 1);
+                    result.push_back(nodes[low].i + 1);
                 }
+                break;
+            } else if (nodes[low].val + nodes[high].val < target) {
+                while (++low < high && nodes[low].val == nodes[low - 1].val) ;
+            } else {
+                while (--high > low && nodes[high].val == nodes[high + 1].val) ;
             }
         }
         return result;
     }
 };
 
+static Solution s;
+
 int main(int argc, char **argv) {
-    int n;
-    vector<int> vec;
-    while (scanf("%d", &n)) {
-        vec.push_back(n);
+    vector<int> numbers;
+    for (int i = 1; i < argc - 1; i++) {
+        numbers.push_back(atoi(argv[i]));
     }
-
-    int target = vec.back();
-    vec.pop_back();
-
-    printf("input: ");
-    for (int i = 0; i < vec.size(); i++) {
-        printf("%d ", vec[i]);
-    }
-    printf("target: %d\n", target);
-
-    Solution s;
-    vector<int> result = s.twoSum(vec, target);
-    printf("%d %d\n", result[1], result[2]);
-
+    vector<int> result = s.twoSum(numbers, atoi(argv[argc - 1]));
+    printf("%d %d\n", result[0], result[1]);
     return 0;
 }
