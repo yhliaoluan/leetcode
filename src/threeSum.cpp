@@ -19,63 +19,46 @@ using namespace std;
 class Solution {
 public:
     vector<vector<int> > threeSum(vector<int> &num) {
-        vector<vector<int> >v;
-        if (num.size() == 0) {
-            return v;
+        vector<vector<int> > result;
+        if (num.size() < 3) {
+            return result;
         }
         sort(num.begin(), num.end());
-        int sum;
         for (int i = 0; i < num.size() - 2; i++) {
-            if (i > 0 && num[i] == num[i - 1]) {
-                continue;
-            }
-            sum = num[i];
-            if (sum > 0) {
-                break;
-            }
-            for (int j = i + 1; j < num.size() - 1; j++) {
-                if (j > i + 1 && num[j] == num[j - 1]) {
-                    continue;
-                }
-                sum = num[j] + num[i];
-                if (sum > 0) {
-                    break;
-                }
-                for (int n = j + 1; n < num.size(); n++) {
-                    if (n > j + 1 && num[n] == num[n - 1]) {
-                        continue;
-                    }
-                    sum = num[i] + num[j] + num[n];
-                    if (sum > 0) {
-                        break;
-                    } else if (sum == 0) {
-                        vector<int> tmp;
-                        tmp.push_back(num[i]);
-                        tmp.push_back(num[j]);
-                        tmp.push_back(num[n]);
-                        v.push_back(tmp);
-                    }
+            if (i > 0 && num[i] == num[i - 1]) continue;
+            int low = i + 1;
+            int high = num.size() - 1;
+            while (low < high) {
+                int target = 0 - num[i];
+                if (num[low] + num[high] == target) {
+                    vector<int> tmp;
+                    tmp.push_back(num[i]);
+                    tmp.push_back(num[low]);
+                    tmp.push_back(num[high]);
+                    result.push_back(tmp);
+                    while (++low < high && num[low] == num[low - 1]) ;
+                    while (--high > low && num[high] == num[high + 1]) ;
+                } else if (num[low] + num[high] < target) {
+                    while (++low < high && num[low] == num[low - 1]) ;
+                } else {
+                    while (--high > low && num[high] == num[high + 1]) ;
                 }
             }
         }
-
-        return v;
+        return result;
     }
 };
 
+static Solution s;
+
 int main(int argc, char **argv) {
-    int num, code;
-    vector<int> vec;
-    while (scanf("%d", &num)) {
-        vec.push_back(num);
+    vector<int> num;
+    for (int i = 1; i < argc; i++) {
+        num.push_back(atoi(argv[i]));
     }
-    Solution s;
-    vector<vector<int> > v = s.threeSum(vec);
-    for (int i = 0; i < v.size(); i++) {
-        for (int j = 0; j < v[i].size(); j++) {
-            printf("%d ", v[i][j]);
-        }
-        printf("\n");
+    vector<vector<int> > result = s.threeSum(num);
+    for (int i = 0; i < result.size(); i++) {
+        printf("%d %d %d\n", result[i][0], result[i][1], result[i][2]);
     }
     return 0;
 }
