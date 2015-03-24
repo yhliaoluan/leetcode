@@ -31,70 +31,40 @@ public:
                 map[num[i] + num[j]].push_back(make_pair(i, j));
             }
         }
+        while (map.size() > 0) {
+            auto bg = map.begin();
+            auto mp = map.find(target - bg->first);
+            if (mp != map.end()) {
+                for (int i = 0; i < bg->second.size(); i++) {
+                    for (int j = 0; j < mp->second.size(); j++) {
+                        if (bg->second[i].first != mp->second[j].first &&
+                            bg->second[i].second != mp->second[j].second &&
+                            bg->second[i].first != mp->second[j].second &&
+                            bg->second[i].second != mp->second[j].first) {
 
-        for (int i = 0; i < num.size() - 1; i++) {
-            if (i > 0 && num[i] == num[i - 1]) {
-                continue;
-            }
-            for (int j = i + 1; j < num.size(); j++) {
-                if (j > i + 1 && num[j] == num[j - 1]) {
-                    continue;
-                }
-                int target2 = target - num[i] - num[j];
-                bool assigned = false;
-                int x, y;
-                for (int k = 0; k < map[target2].size(); k++) {
-                    if (map[target2][k].first > j) {
-                        if (assigned && num[x] == num[map[target2][k].first]) {
-                            continue;
+                                vector<int> tmp;
+                                tmp.push_back(num[bg->second[i].first]);
+                                tmp.push_back(num[bg->second[i].second]);
+                                tmp.push_back(num[mp->second[j].first]);
+                                tmp.push_back(num[mp->second[j].second]);
+                                sort(tmp.begin(), tmp.end());
+                                if (find(result.begin(), result.end(), tmp) == result.end()) {
+                                    result.push_back(tmp);
+                                }
                         }
-                        assigned = true;
-                        x = map[target2][k].first;
-                        y = map[target2][k].second;
-                        vector<int> tmp;
-                        tmp.push_back(num[i]);
-                        tmp.push_back(num[j]);
-                        tmp.push_back(num[x]);
-                        tmp.push_back(num[y]);
-                        result.push_back(std::move(tmp));
                     }
                 }
+                if (bg != mp) {
+                    map.erase(bg);
+                }
+                map.erase(mp);
+            } else {
+                map.erase(bg);
             }
         }
         return result;
     }
 };
-
-vector<vector<int> > fourSumN3(vector<int> &num, int target) {
-    vector<vector<int> > result;
-    if (num.size() < 4) {
-        return result;
-    }
-    sort(num.begin(), num.end());
-    for (int i = 0; i < num.size() - 3; i++) {
-        if (i > 0 && num[i] == num[i - 1]) {
-            continue;
-        }
-        for (int j = i + 1; j < num.size() - 2; j++) {
-            if (j > i + 1 && num[j] == num[j - 1]) {
-                continue;
-            }
-            int high = num.size() - 1;
-            int low = j + 1;
-            while (low < high) {
-                if (num[i] + num[j] + num[low] + num[high] == target) {
-                    vector<int> tmp;
-                    tmp.push_back(num[i]);
-                    tmp.push_back(num[j]);
-                    tmp.push_back(num[low]);
-                    tmp.push_back(num[high]);
-                    result.push_back(tmp);
-                }
-            }
-        }
-    }
-}
-
 static Solution s;
 
 static void TEST(vector<int> &num, int target) {
