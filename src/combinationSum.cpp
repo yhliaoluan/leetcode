@@ -30,13 +30,69 @@ void find_next(vector<int> &candidates, int index, vector<int> arr,
     }
 }
 
+vector<vector<int> > recurse(vector<int> &candidates, int target) {
+    sort(candidates.begin(), candidates.end());
+    vector<vector<int> > result;
+    find_next(candidates, 0, vector<int>(), result, target);
+    return result;
+}
+
+typedef unordered_map<int, vector<vector<int> > > um;
+
+vector<vector<int> > dp_recurse(vector<int> &num, int i, int remain, um m[]) {
+    if (m[i].find(remain) != m[i].end()) {
+        return m[i][remain];
+    }
+    vector<vector<int> > all;
+    if (i == 0) {
+        if (remain > 0 && remain % num[i] == 0) {
+            vector<int> tmp(remain / num[i], num[i]);
+            all.push_back(tmp);
+        }
+    } else {
+        int k = 1;
+        while (remain - k * num[i] >= 0) {
+            if (remain - k * num[i] == 0) {
+                vector<int> v;
+                for (int j = 0; j < k; j++) {
+                    v.push_back(num[i]);
+                }
+                all.push_back(v);
+            } else {
+                for (int n = 1; i - n >= 0; n++) {
+                    vector<vector<int> > last = dp_recurse(num, i - n, remain - k * num[i], m);
+                    for (int p = 0; p < last.size(); p++) {
+                        vector<int> v = last[p];
+                        for (int j = 0; j < k; j++) {
+                            v.push_back(num[i]);
+                        }
+                        all.push_back(v);
+                    }
+                }
+            }
+            k++;
+        }
+    }
+    m[i][remain] = all;
+    return all;
+}
+
+vector<vector<int> > dp(vector<int> &num, int target) {
+    vector<vector<int> > all;
+    um *m = new um[num.size()];
+    for (int i = 0; i < num.size(); i++) {
+        vector<vector<int> > single = dp_recurse(num, i, target, m);
+        all.insert(all.end(), single.begin(), single.end());
+    }
+    delete[] m;
+    return all;
+}
+
 class Solution {
 public:
     vector<vector<int> > combinationSum(vector<int> &candidates, int target) {
         sort(candidates.begin(), candidates.end());
-        vector<vector<int> > result;
-        find_next(candidates, 0, vector<int>(), result, target);
-        return result;
+        return dp(candidates, target);
     }
 };
 
@@ -52,7 +108,7 @@ int main(int argc, char **argv) {
         for (int j = 0; j < result[i].size(); j++) {
             cout << result[i][j] << ",";
         }
-        cout << "]" << endl;
+        cout << "\b" << "]" << endl;
     }
     return 0;
 }
