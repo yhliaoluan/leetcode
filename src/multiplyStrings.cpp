@@ -25,7 +25,7 @@ public:
             r[i] %= 10;
         }
         int index = m + n - 1;
-        while (r[index] == 0) {
+        while (index >= 0 && r[index] == 0) {
             index--;
         }
         string result;
