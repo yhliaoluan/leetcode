@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stack>
 #include <unordered_map>
+#include <cstring>
 using namespace std;
 
 #endif
