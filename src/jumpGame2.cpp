@@ -15,18 +15,17 @@ The minimum number of jumps to reach the last index is 2. (Jump 1 step from inde
 class Solution {
 public:
     int jump(int A[], int n) {
-        stack<int> s;
-        for (int i = n - 2; i >= 0; i--) {
-            int capacity = A[i];
-            int move = 1;
-            while (!s.empty() && capacity > s.top()) {
-                move += s.top();
-                capacity -= s.top();
-                s.pop();
+        int range = 0;
+        int next = 0;
+        int step = 0;
+        for (int i = 0; i < n - 1; i++) {
+            if (i >= range) {
+                step++;
+                range = max(next, A[i] + i);
             }
-            s.push(move);
+            next = max(next, A[i] + i);
         }
-        return s.size();
+        return step;
     }
 };
 
