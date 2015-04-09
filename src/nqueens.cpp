@@ -18,30 +18,22 @@ There exist two distinct solutions to the 4-queens puzzle:
   ".Q.."]
 ]
 */
-static void set(vector<vector<int> > &board, int i, int j) {
-}
-
-static void nqueen(int i, vector<vector<int> > board, vector<vector<string> > &result) {
-    if (i == board.size()) {
-        vector<string> r;
-        for (int x = 0; x < board.size(); x++) {
-            string line;
-            for (int y = 0; y < board.size(); y++) {
-                if (board[x][y]) {
-                    line.append('Q');
-                } else {
-                    line.append('.');
-                }
-            }
-            r.push_back(line);
-        }
-        result.push_back(r);
+#include "header.h"
+static void solve(int i, vector<string> &board, vector<vector<string> > &result) {
+    if (i >= board.size()) {
+        result.push_back(board);
+        return;
     }
     for (int j = 0; j < board.size(); j++) {
-        if (board[i][j]) {
-            vector<vector<int> > copy = board;
-            set(copy, i, j);
-            nqueen(i + 1, copy, result);
+        if (board[i][j] == 'Q') {
+            vector<string> copy = board;
+            for (int x = 1; x < board.size(); x++) {
+                copy[(i+x)%board.size()][j] = '.';
+                copy[(i+x)%board.size()][(j+x)%board.size()] = '.';
+                copy[i][(j+x)%board.size()] = '.';
+                copy[(i+x)%board.size()][abs(j-x)%board.size()] = '.';
+            }
+            solve(i + 1, copy, result);
         }
     }
 }
@@ -49,17 +41,28 @@ static void nqueen(int i, vector<vector<int> > board, vector<vector<string> > &r
 class Solution {
 public:
     vector<vector<string> > solveNQueens(int n) {
-        vector<vector<int> > q;
+        vector<vector<string> > result;
+        vector<string> init;
         for (int i = 0; i < n; i++) {
-            vector<int> line;
+            string s;
             for (int j = 0; j < n; j++) {
-                line.push_back(1);
+                s += 'Q';
             }
-            q.push_back(line);
+            init.push_back(s);
         }
+        solve(0, init, result);
+        return result;
     }
 };
 
 int main(int argc, char **argv) {
+    Solution s;
+    vector<vector<string> > result = s.solveNQueens(atoi(argv[1]));
+    for (int i = 0; i < result.size(); i++) {
+        for (int j = 0; j < result[i].size(); j++) {
+            cout << result[i][j] << endl;
+        }
+        cout << endl;
+    }
     return 0;
 }
