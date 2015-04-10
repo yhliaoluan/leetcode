@@ -19,39 +19,42 @@ There exist two distinct solutions to the 4-queens puzzle:
 ]
 */
 #include "header.h"
-static void solve(int i, vector<string> &board, vector<vector<string> > &result) {
-    if (i >= board.size()) {
-        result.push_back(board);
-        return;
-    }
-    for (int j = 0; j < board.size(); j++) {
-        if (board[i][j] == 'Q') {
-            vector<string> copy = board;
-            for (int x = 1; x < board.size(); x++) {
-                copy[(i+x)%board.size()][j] = '.';
-                copy[(i+x)%board.size()][(j+x)%board.size()] = '.';
-                copy[i][(j+x)%board.size()] = '.';
-                copy[(i+x)%board.size()][abs(j-x)%board.size()] = '.';
-            }
-            solve(i + 1, copy, result);
-        }
-    }
-}
-
 class Solution {
 public:
     vector<vector<string> > solveNQueens(int n) {
+        vector<int> rows(n, -1);
         vector<vector<string> > result;
-        vector<string> init;
-        for (int i = 0; i < n; i++) {
-            string s;
-            for (int j = 0; j < n; j++) {
-                s += 'Q';
-            }
-            init.push_back(s);
-        }
-        solve(0, init, result);
+        dfs(rows, 0, result);
         return result;
+    }
+private:
+    void dfs(vector<int> &rows, int row, vector<vector<string> > &result) {
+        if (row >= rows.size()) {
+            vector<string> board;
+            for (int i = 0; i < rows.size(); i++) {
+                string s(rows.size(), '.');
+                s[rows[i]] = 'Q';
+                board.push_back(s);
+            }
+            result.push_back(board);
+            return;
+        }
+
+        for (int col = 0; col < rows.size(); col++) {
+            if (valid(col, rows, row)) {
+                rows[row] = col;
+                dfs(rows, row + 1, result);
+                rows[row] = -1;
+            }
+        }
+    }
+    bool valid(int col, vector<int> &rows, int row) {
+        for (int i = 0; i < row; i++) {
+            if (rows[i] == col || abs(i - row) == abs(rows[i] - col)) {
+                return false;
+            }
+        }
+        return true;
     }
 };
 
