@@ -23,4 +23,11 @@ static void print_grid(vector<vector<T> > &grid) {
     cout << ">>>>" << endl;
 }
 
+template <class T>
+static void print_vector(const vector<T> &vec) {
+    for (int i = 0; i < vec.size(); i++)
+        cout << vec[i] << " ";
+    cout << "END" << endl;
+}
+
 #endif
