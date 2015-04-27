@@ -11,11 +11,9 @@ public:
         return bin_src(x, 0, min(x, 46340));
     }
     int bin_src(int x, int low, int up) {
-        if (low == up) { return low; }
+        if (low == up) { return low * low <= x ? low : max(0, low - 1); }
         int bin = (low + up) / 2;
-        if (bin * bin == x) {
-            return bin; 
-        } else if (bin * bin > x) {
+        if (bin * bin >= x) {
             return bin_src(x, low, bin);
         } else {
             return bin_src(x, bin + 1, up);
