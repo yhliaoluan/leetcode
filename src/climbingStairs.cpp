@@ -5,27 +5,16 @@ Each time you can either climb 1 or 2 steps. In how many distinct ways can you c
 */
 #include "header.h"
 
-static int cmn(int m, int n) {
-    if (n > m - n) {
-        return cmn(m, m - n);
-    }
-    unsigned long long num = 1;
-    unsigned long long den = 1;
-    while (n > 0) {
-        num *= m--;
-        den *= n--;
-    }
-    return num / den;
-}
 class Solution {
 public:
     int climbStairs(int n) {
-        int times = n / 2;
-        int sum = 0;
-        for (int i = 0; i <= times; i++) {
-            sum += cmn(n - i, i);
+        int a[64] = {0};
+        a[0] = 1;
+        a[1] = 2;
+        for (int i = 2; i < n; i++) {
+            a[i] = a[i - 2] + a[i - 1];
         }
-        return sum;
+        return a[n - 1];
     }
 };
 
