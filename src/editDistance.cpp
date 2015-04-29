@@ -15,15 +15,12 @@ public:
         int l1 = word1.size();
         int l2 = word2.size();
         vector<vector<int> > f;
-        vector<int> line1;
-        for (int j = 0; j <= l2; j++) {
-            line1.push_back(j);
-        }
-        f.push_back(line1);
-        for (int i = 1; i <= l1; i++) {
-            vector<int> line(l2 + 1, 10000000);
+        for (int i = 0; i <= l1; i++) {
+            vector<int> line(l2 + 1, 0);
             f.push_back(line);
         }
+        for (int i = 1; i <= l1; i++) { f[i][0] = i; }
+        for (int j = 1; j <= l2; j++) { f[0][j] = j; }
         for (int i = 1; i <= l1; i++) {
             for (int j = 1; j <= l2; j++) {
                 if (word1[i-1] == word2[j-1]) {
@@ -34,7 +31,6 @@ public:
                 }
             }
         }
-        print_grid(f);
         return f[l1][l2];
     }
 };
