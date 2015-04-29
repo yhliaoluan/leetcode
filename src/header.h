@@ -30,4 +30,19 @@ static void print_vector(const vector<T> &vec) {
     cout << "END" << endl;
 }
 
+static vector<vector<int> > read_grid() {
+    vector<vector<int> > matrix;
+    string s;
+    while (getline(cin, s, '\n')) {
+        stringstream ss(s);
+        int n;
+        vector<int> line;
+        while (ss >> n) {
+            line.push_back(n);
+        }
+        matrix.push_back(line);
+    }
+    return matrix;
+}
+
 #endif
