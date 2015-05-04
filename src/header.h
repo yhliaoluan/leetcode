@@ -1,6 +1,7 @@
 #ifndef _LEETCODE_HEADER_H_
 #define _LEETCODE_HEADER_H_
 
+#include <limits.h>
 #include <vector>
 #include <algorithm>
 #include <iostream>
