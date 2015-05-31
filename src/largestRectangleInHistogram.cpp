@@ -16,24 +16,19 @@ return 10.
 class Solution {
 public:
     int largestRectangleArea(vector<int>& height) {
-        if (height.size() == 1) { return height[0]; }
-        vector<vector<int> > f;
+        int result = 0;
+        height.push_back(0);
+        vector<int> index;
         for (int i = 0; i < height.size(); i++) {
-            vector<int> line(height.size() - i, 0);
-            f.push_back(line);
-            f[i][0] = height[i];
-            for (int j = i + 1; j < f[i].size(); j++) {
-                f[i][j] = min(f[i][j-1], height[j]);
+            while (!index.empty() && height[index.back()] >= height[i]) {
+                int h = height[index.back()];
+                index.pop_back();
+                int sid = index.empty() ? -1 : index.back();
+                result = max(result, h * (i - sid - 1));
             }
+            index.push_back(i);
         }
-        int largest = 0;
-        for (int i = height.size() - 1; i >= 0; i--) {
-            for (int j = i + 1; j < height.size(); j++) {
-                f[i][j] = max(f[i+1][j], max(f[i][j] * (j - i + 1), f[i][j-1]));
-                largest = max(largest, f[i][j]);
-            }
-        }
-        return largest;
+        return result;
     }
 };
 
