@@ -32,13 +32,14 @@ static void print_vector(const vector<T> &vec) {
     cout << "END" << endl;
 }
 
-static vector<vector<int> > read_grid() {
-    vector<vector<int> > matrix;
+template <class T>
+static vector<vector<T> > read_grid() {
+    vector<vector<T> > matrix;
     string s;
     while (getline(cin, s, '\n')) {
         stringstream ss(s);
-        int n;
-        vector<int> line;
+        T n;
+        vector<T> line;
         while (ss >> n) {
             line.push_back(n);
         }
