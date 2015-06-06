@@ -27,6 +27,7 @@ static void print_grid(vector<vector<T> > &grid) {
 
 template <class T>
 static void print_vector(const vector<T> &vec) {
+    cout << "size:" << vec.size() << " ";
     for (int i = 0; i < vec.size(); i++)
         cout << vec[i] << " ";
     cout << "END" << endl;
