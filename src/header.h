@@ -13,6 +13,20 @@
 #include <cstring>
 using namespace std;
 
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+static void print_list(ListNode *head) {
+    while (head) {
+        cout << head->val << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
 template <class T>
 static void print_grid(vector<vector<T> > &grid) {
     cout << "<<<<" << endl;
