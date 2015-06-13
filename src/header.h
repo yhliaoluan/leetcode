@@ -3,6 +3,7 @@
 
 #include <limits.h>
 #include <vector>
+#include <queue>
 #include <algorithm>
 #include <iostream>
 #include <sstream>
