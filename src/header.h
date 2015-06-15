@@ -70,4 +70,26 @@ static vector<vector<T> > read_grid() {
     return matrix;
 }
 
+static TreeNode *read_tree(int argc, char **argv) {
+    queue<TreeNode *> q;
+    int index = 0;
+    TreeNode *node = new TreeNode(atoi(argv[index++]));
+    q.push(node);
+    while (index < argc) {
+        TreeNode *cur = q.front();
+        q.pop();
+        if (argv[index][0] != '#') {
+            cur->left = new TreeNode(atoi(argv[index]));
+            q.push(cur->left);
+        }
+        index++;
+        if (argv[index][0] != '#') {
+            cur->right = new TreeNode(atoi(argv[index]));
+            q.push(cur->right);
+        }
+        index++;
+    }
+    return node;
+}
+
 #endif
