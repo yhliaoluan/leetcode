@@ -70,6 +70,18 @@ static vector<vector<T> > read_grid() {
     return matrix;
 }
 
+static void level_order_internal(TreeNode *node) {
+    if (!node) { return; }
+    level_order_internal(node->left);
+    cout << node->val << " ";
+    level_order_internal(node->right);
+}
+
+static void level_order(TreeNode *root) {
+    level_order_internal(root);
+    cout << endl;
+}
+
 static TreeNode *read_tree(int argc, char **argv) {
     queue<TreeNode *> q;
     int index = 0;
