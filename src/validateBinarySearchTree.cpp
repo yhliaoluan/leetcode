@@ -42,25 +42,7 @@ public:
 };
 
 int main(int argc, char **argv) {
-    queue<TreeNode *> q;
-    TreeNode *node = new TreeNode(atoi(argv[1]));
-    q.push(node);
-    int i = 2;
-    cout << "param count " << argc << endl;
-    while (i < argc) {
-        TreeNode *cur = q.front();
-        q.pop();
-        if (argv[i][0] != '#') {
-            cur->left = new TreeNode(atoi(argv[i]));
-            q.push(cur->left);
-        }
-        i++;
-        if (argv[i][0] != '#') {
-            cur->right = new TreeNode(atoi(argv[i]));
-            q.push(cur->right);
-        }
-        i++;
-    }
+    TreeNode *node = read_tree(argc - 1, argv + 1);
     Solution s;
     cout << s.isValidBST(node) << endl;
     return 0;
