@@ -35,7 +35,7 @@ static void print_list(ListNode *head) {
 }
 
 template <class T>
-static void print_grid(vector<vector<T> > &grid) {
+static void print_grid(vector<vector<T> > grid) {
     cout << "<<<<" << endl;
     for (int i = 0; i < grid.size(); i++) {
         for (int j = 0; j < grid[i].size(); j++) {
