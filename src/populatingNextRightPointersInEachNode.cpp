@@ -77,13 +77,11 @@ int main(int argc, char **argv) {
     TreeLinkNode three(3);
     TreeLinkNode four(4);
     TreeLinkNode five(5);
-    TreeLinkNode six(6);
     TreeLinkNode seven(7);
     one.left = &two;
     one.right = &three;
     two.left = &four;
     two.right = &five;
-    three.left = &six;
     three.right = &seven;
 
     Solution s;
@@ -92,8 +90,7 @@ int main(int argc, char **argv) {
     assert(two.next, &three);
     assert(three.next, (TreeLinkNode *)NULL);
     assert(four.next, &five);
-    assert(five.next, &six);
-    assert(six.next, &seven);
+    assert(five.next, &seven);
     assert(seven.next, (TreeLinkNode *)NULL);
 
     return 0;
