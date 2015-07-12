@@ -1,4 +1,2 @@
-X X X X
-X O O X
-X X O X
-X O X X
+0 0 0 0 0
+1 1 1 1 1
