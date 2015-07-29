@@ -1,71 +1,29 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#ifndef INT_MIN
-#define INT_MIN -2147483648
-#endif
-
-typedef struct Node {
-    int val;
-    int min;
-    Node *next;
-    Node *pre;
-} Node;
+#include "header.h"
 
 class MinStack {
 public:
-    MinStack() : _cur(NULL) {}
-
-    ~MinStack() {
-        while (_cur != NULL) {
-            Node *parent = _cur->pre;
-            free(_cur);
-            _cur = parent;
-        }
-    }
     void push(int x) {
-        if (_cur == NULL) {
-            _cur = create(x);
-        } else {
-            Node *cur = create(x);
-            cur->min = min(cur->min, _cur->min);
-            cur->pre = _cur;
-            _cur->next = cur;
-            _cur = cur;
-        }
+        values.push(x);
+        mins.push(mins.empty() ? x : min(x, mins.top()));
     }
 
     void pop() {
-        if (_cur != NULL) {
-            Node *parent = _cur->pre;
-            free(_cur);
-            _cur = parent;
-        }
+        values.pop();
+        mins.pop();
     }
 
     int top() {
-        if (_cur != NULL) {
-            return _cur->val;
-        }
+        return values.top();
     }
 
     int getMin() {
-        if (_cur != NULL) {
-            return _cur->min;
-        }
+        return mins.top();
     }
-
 private:
-    Node *create(int val) {
-        Node *node = (Node *)malloc(sizeof(Node));
-        node->val = node->min = val;
-        node->pre = node->next = NULL;
-        return node;
-    }
-    int min(int x, int y) { return x < y ? x : y; }
-    Node *_cur;
+    stack<int> values;
+    stack<int> mins;
 };
+
 int main(int argc, char **argv) {
     MinStack ms;
     printf("push %d\n", 5);
