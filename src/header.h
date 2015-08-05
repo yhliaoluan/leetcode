@@ -2,6 +2,7 @@
 #define _LEETCODE_HEADER_H_
 
 #include <limits.h>
+#include <cstdint>
 #include <vector>
 #include <queue>
 #include <algorithm>
