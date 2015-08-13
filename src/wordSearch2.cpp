@@ -24,10 +24,14 @@ public:
     vector<string> findWords(vector<vector<char>>& board,
         vector<string>& words) {
         vector<string> res;
+        unordered_set<string> hash;
         if (board.empty()) { return res; }
         for (string &word : words) {
             if (contains(board, word)) {
-                res.push_back(word);
+                if (hash.find(word) == hash.end()) {
+                    hash.insert(word);
+                    res.push_back(word);
+                }
             }
         }
         return res;
@@ -57,10 +61,12 @@ public:
         if (used[x][y]) { return false; }
         if (board[x][y] != word[index]) { return false; }
         used[x][y] = 1;
-        return check(used, x - 1, y, word, index + 1, board) ||
+        bool result = check(used, x - 1, y, word, index + 1, board) ||
             check(used, x + 1, y, word, index + 1, board) ||
             check(used, x, y - 1, word, index + 1, board) ||
             check(used, x, y + 1, word, index + 1, board);
+        used[x][y] = 0;
+        return result;
     }
 };
 
