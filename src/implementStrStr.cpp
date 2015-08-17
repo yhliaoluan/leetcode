@@ -6,31 +6,27 @@ Returns the index of the first occurrence of needle in haystack, or -1 if needle
 Update (2014-11-02):
 The signature of the function had been updated to return the index instead of the pointer. If you still see your function signature returns a char * or String, please click the reload button  to reset your code definition.
 */
-#include <iostream>
-using namespace std;
+#include "header.h"
 
-static int getMaxMatchLength(const char *needle, int index) {
-    for (int i = index; i > 0; i--) {
-        if (memcmp(needle, needle + index + 1 - i, i) == 0) {
-            return i;
-        }
+static vector<int> getNextTable(string& needle) {
+    if (needle.size() == 0) {
+        return vector<int>();
     }
-    return 0;
+    vector<int> next(needle.size(), 0);
+    for (int i = 1; i < needle.size(); i++) {
+        int j = next[i - 1];
+        while (j > 0 && needle[j] != needle[i])
+            j = next[j - 1];
+        next[i] = j + (needle[j] == needle[i]);
+    }
+    return next;
 }
 
 class Solution {
 public:
-    int strStr(char *haystack, char *needle) {
-        if (!haystack || !needle) {
-            return -1;
-        }
-        int ln = strlen(needle);
-        int *table = new int[ln];
+    int strStr(string haystack, string needle) {
+        vector<int> table = getNextTable(needle);
         int index = 0;
-        while (needle[index] != '\0') {
-            table[index] = getMaxMatchLength(needle, index);
-            index++;
-        }
         int i = 0;
         for (;;) {
             index = i;
@@ -53,9 +49,6 @@ public:
 };
 
 int main(int argc, char **argv) {
-    if (argc > 2) {
-        Solution s;
-        cout << s.strStr(argv[1], argv[2]) << endl;
-    }
+    cout << Solution().strStr(argv[1], argv[2]) << endl;
     return 0;
 }
