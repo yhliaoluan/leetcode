@@ -3,6 +3,7 @@
 
 #include <limits.h>
 #include <cstdint>
+#include <deque>
 #include <vector>
 #include <queue>
 #include <algorithm>
