@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <map>
+#include <list>
 #include <cstring>
 using namespace std;
 
@@ -54,6 +55,14 @@ static void print_vector(const vector<T> &vec) {
     cout << "size:" << vec.size() << " ";
     for (int i = 0; i < vec.size(); i++)
         cout << vec[i] << " ";
+    cout << "END" << endl;
+}
+
+template <class T>
+static void print_ite(T &c) {
+    for (auto it = c.begin(); it != c.end(); it++) {
+        cout << *it << " ";
+    }
     cout << "END" << endl;
 }
 
