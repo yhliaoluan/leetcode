@@ -116,4 +116,12 @@ static TreeNode *read_tree(int argc, char **argv) {
     return node;
 }
 
+static void split(string str, char delim, vector<string> &result) {
+    stringstream ss(str);
+    string item;
+    while (getline(ss, item, delim)) {
+        result.push_back(item);
+    }
+}
+
 #endif

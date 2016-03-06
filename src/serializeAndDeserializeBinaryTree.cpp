@@ -30,7 +30,7 @@ public:
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
         queue<TreeNode*> q;
-        q.push(root);
+        if (root != nullptr) q.push(root);
         stringstream ss;
         ss << "[";
         const char *sep = "";
@@ -53,7 +53,36 @@ public:
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        return nullptr;
+        vector<string> elems;
+        split(data.substr(1, data.size() - 2), ',', elems);
+        if (elems.size() == 0) return nullptr;
+        int i = 0;
+        TreeNode *root = new TreeNode(stoi(elems[i++]));
+        queue<TreeNode *> q;
+        q.push(root);
+        while (!q.empty()) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (elems[i].compare("null") != 0) {
+                cur->left = new TreeNode(stoi(elems[i]));
+                q.push(cur->left);
+            }
+            i++;
+            if (elems[i].compare("null") != 0) {
+                cur->right = new TreeNode(stoi(elems[i]));
+                q.push(cur->right);
+            }
+            i++;
+        }
+        return root;
+    }
+private:
+    void split(string str, char delim, vector<string>& result) {
+        stringstream ss(str);
+        string item;
+        while (getline(ss, item, delim)) {
+            result.push_back(item);
+        }
     }
 };
 
@@ -71,6 +100,10 @@ int main(int argc, char **argv) {
     n2.right = &n4;
 
     Codec codec;
-    cout << codec.serialize(&n1) << endl;
+    string serialized = codec.serialize(&n1);
+    cout << serialized << endl;
+    TreeNode *root = codec.deserialize(serialized);
+    string serialized2 = codec.serialize(root);
+    cout << serialized2 << endl;
     return 0;
 }
