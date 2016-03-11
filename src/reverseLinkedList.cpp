@@ -14,6 +14,10 @@ Reverse a singly linked list.
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
+        return recursive(head);
+    }
+
+    ListNode *iterative(ListNode *head) {
         ListNode *cur = NULL;
         while (head) {
             ListNode *tmp = head;
@@ -22,6 +26,16 @@ public:
             cur = tmp;
         }
         return cur;
+    }
+
+    ListNode *recursive(ListNode *node) {
+        if (!node) return nullptr;
+        ListNode *next = node->next;
+        if (!next) return node;
+        ListNode *head = recursive(next);
+        next->next = node;
+        node->next = nullptr;
+        return head;
     }
 };
 
