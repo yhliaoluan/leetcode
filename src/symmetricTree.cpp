@@ -1,67 +1,51 @@
-#include <stdio.h>
-#include <queue>
+/*
+ *Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
 
-using namespace std;
-typedef struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-} TreeNode;
+For example, this binary tree is symmetric:
 
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+But the following is not:
+    1
+   / \
+  2   2
+   \   \
+   3    3
+ * */
+
+#include "header.h"
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 class Solution {
 public:
-    bool isEqual(TreeNode *n1, TreeNode *n2) {
-        if (n1 == NULL) {
-            return (n2 == NULL);
-        }
-        if (n2 == NULL) {
-            return false;
-        }
-        return n1->val == n2->val;
+    bool isSymmetric(TreeNode* root) {
+        return root == nullptr || isSymmetric(root->left, root->right);
     }
 
-    bool isSymmetric(TreeNode *root) {
-        if (root == NULL) {
-            return true;
-        }
-        queue<TreeNode *> q1, q2;
-        q1.push(root);
-        q2.push(root);
+    bool isSymmetric(TreeNode *left, TreeNode *right) {
+        if (left == nullptr && right == nullptr) return true;
+        if (left == nullptr || right == nullptr) return false;
+        if (left->val != right->val) return false;
 
-        for (;;) {
-            int size1 = q1.size();
-            int size2 = q2.size();
-            if (size1 != size2) {
-                return false;
-            }
-            if (size1 == 0) {
-                break;
-            }
-
-            TreeNode *node1 = q1.front();
-            TreeNode *node2 = q2.front();
-            q1.pop();
-            q2.pop();
-            if (!isEqual(node1, node2)) {
-                return false;
-            }
-            if (!node1) {
-                continue;
-            }
-            q1.push(node1->left);
-            q1.push(node1->right);
-            q2.push(node2->right);
-            q2.push(node2->left);
-        }
-        return true;
+        return isSymmetric(left->left, right->right) &&
+            isSymmetric(left->right, right->left);
     }
 };
 
 int main(int argc, char **argv) {
     TreeNode n1(1);
     TreeNode n2(2);
-    TreeNode n3(3);
+    TreeNode n3(2);
 
     n1.left = &n2;
     n1.right = &n3;
