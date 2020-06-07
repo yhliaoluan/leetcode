@@ -15,6 +15,9 @@
 *.a
 *.lib
 
+# Compiled TS files
+*.js
+
 # Executables
 *.exe
 *.out
@@ -22,3 +25,6 @@
 
 # gvim generated files
 *.swp
+
+# idea files
+.idea
